@@ -2,16 +2,14 @@ package com.daniel.security.web.aspect;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
-import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
 /**
  * on 5/25/2018.
  */
-@Aspect
-@Component
+//@Aspect
+//@Component
 public class TimeAspect {
     /**
      * 指定哪些方法会被切入
