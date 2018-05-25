@@ -1,5 +1,6 @@
 package com.daniel.security.web.controller;
 
+import com.daniel.security.exception.UserNotExistException;
 import com.daniel.security.web.dto.User;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
@@ -20,6 +21,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/user")
 public class UserController {
+
+    @DeleteMapping("/{id:\\d+}")
+    public void delete(@PathVariable Integer id) {
+        System.out.println(id);
+    }
+
 
     @PutMapping("/{id:\\d+}")
     public User updateUser(@PathVariable Integer id, @Valid @RequestBody User user, BindingResult errors) {
@@ -66,7 +73,11 @@ public class UserController {
     @JsonView(User.UserDetailView.class)
     @GetMapping("/{id:\\d+}")
     public User getUserById(@PathVariable Integer id) {
-        System.out.println(id);
+        System.out.println("input getUserById method ... ");
+
+        if (id==1)
+            throw new UserNotExistException(id);
+
         return new User(id, "jack", "ppp");
     }
 

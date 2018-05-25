@@ -1,5 +1,6 @@
 package com.daniel.security.web.dto;
 
+import com.daniel.security.annotation.MyConstraint;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -24,6 +25,7 @@ public class User {
 
     private Integer id;
 
+    @MyConstraint(message = "userName customed valid: just a test")
     private String userName;
 
     @NotBlank(message = "password can not be null or empty")

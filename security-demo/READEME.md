@@ -28,6 +28,7 @@ spring boot 自定义异常处理
     定义不同的方法处理不同类型的exception 通过@ExceptionHandler指定方法处理的是何种类型的exception 方法的返回值直接返回给客户端
 
 spring boot 拦截机制
+
     1 Filter:
         实现javax.servlet接口,加上@Component
 
