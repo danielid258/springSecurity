@@ -2,6 +2,7 @@ package com.daniel.security.web.dto;
 
 import com.daniel.security.annotation.MyConstraint;
 import com.fasterxml.jackson.annotation.JsonView;
+import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.Past;
@@ -25,6 +26,7 @@ public class User {
 
     private Integer id;
 
+    @ApiModelProperty("user name")
     @MyConstraint(message = "userName customed valid: just a test")
     private String userName;
 
