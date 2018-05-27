@@ -77,6 +77,56 @@ spring boot 文件上传下载
 
 spring boot 多线程异步处理请求
     Callable
+    DeferredResult
+
+spring security 核心功能
+    认证
+    授权
+    防护攻击(身份伪造)
+
+
+
+spring security
+    基本原理
+        过滤器链
+            请求
+            是否有username和password信息
+                有 -> 认证(UsernamePasswordAuthenticationFilter,BasicAuthenticationFilter ...)  -> FilterSecurityInterceptor -> 是否有认证成功的信息
+                                                                                                                                 有  -> 目标资源
+
+                                                                                                                                 无  -> 抛出异常  -> ExceptionTranslationFilter  -> 跳转到当前配置的认证方式对应的登录页
+
+
+                无 -> FilterSecurityInterceptor -> 是否有认证成功的信息
+                                                    有  -> 目标资源
+
+                                                    无  -> 抛出异常  -> ExceptionTranslationFilter  -> 跳转到当前配置的认证方式对应的登录页
+
+    自定义用户认证逻辑
+        实现UserDetailsService接口,加@Component,实现loadUserByUsername方法,返回UserDetails接口的实例对象
+        其中 UserDetails的实现类 可以自定义,springSecurity提供默认实现org.springframework.security.core.userdetails.User
+
+        密码加密解密
+            定义类实现PasswordEncoder接口  springSecurity提供的默认实现:BCryptPasswordEncoder
+            其中 encode方法实现加密逻辑,密码入库前调用encode加密; matches方法判断密码是否匹配,由springSecurity调用
+
+
+    自定义登录页面
+        .loginPage("/sign.html")
+        .loginProcessingUrl("/authenticate/form")
+
+    处理不同类型的请求 html,json
+        所有需要认证的请求都跳转到自定义 Controller[ @RequestMapping("/authenticate/require")] 在controller内判断引发跳转的请求类型
+            html页面认证页面请求 -> 客户端指定的页面(客户端未指定跳到默认页面)
+            json数据型请求 -> 返回401(未授权) 让客户端自行引导用户进行认证
+
+
+
+
+
+
+
+
 
 
 
