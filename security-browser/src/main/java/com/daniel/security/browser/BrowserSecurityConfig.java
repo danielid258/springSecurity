@@ -1,5 +1,7 @@
 package com.daniel.security.browser;
 
+import com.daniel.security.browser.authentication.CustomizedAuthenticationFailureHandler;
+import com.daniel.security.browser.authentication.CustomizedAuthenticationSuccessHandler;
 import com.daniel.security.core.properties.SecurityProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -16,12 +18,18 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     SecurityProperties securityProperties;
+    @Autowired
+    CustomizedAuthenticationSuccessHandler successHandler;
+    @Autowired
+    CustomizedAuthenticationFailureHandler failureHandler;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.formLogin()
                 .loginPage("/authenticate/require")         //在此处确定跳转的认证页面地址
                 .loginProcessingUrl("/authenticate/form")   //UsernamePasswordAuthenticationFilter处理提交到这个地址的登录信息
+                .successHandler(successHandler)
+                .failureHandler(failureHandler)
                 .and()
                 .authorizeRequests()    //authorize 授权
                 .antMatchers("/authenticate/require"
