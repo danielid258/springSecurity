@@ -36,6 +36,18 @@ public class BrowserSecurityController {
     @Autowired
     SecurityProperties securityProperties;
 
+    /**
+     * 处理所有需要认证的请求
+     *
+     * html认证页面请求 -> 返回客户端指定的页面(客户端未指定跳到默认页面)
+     *
+     * json数据型请求 -> 返回401(未授权) 让客户端自行引导用户进行认证
+     *
+     * @param request
+     * @param response
+     * @return
+     * @throws IOException
+     */
     @RequestMapping("/authenticate/require")
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public SimpleResponse requireAuthentication(HttpServletRequest request, HttpServletResponse response) throws IOException {
