@@ -1,5 +1,6 @@
 package com.daniel.security.browser.authentication;
 
+import com.daniel.security.browser.support.SimpleResponse;
 import com.daniel.security.core.properties.LoginType;
 import com.daniel.security.core.properties.SecurityProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -7,10 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
 
@@ -45,7 +43,7 @@ public class CustomizedAuthenticationFailureHandler extends SimpleUrlAuthenticat
         if (LoginType.JSON.equals(securityProperties.getBrowser().getLoginType())) {
             response.setStatus(HttpStatus.BAD_REQUEST.value());
             response.setContentType("application/json;charset=UTF-8");
-            response.getWriter().write(objectMapper.writeValueAsString(e));
+            response.getWriter().write(objectMapper.writeValueAsString(new SimpleResponse(e.getMessage())));
         } else {
             //客户端未指定返回格式 默认跳转
             super.onAuthenticationFailure(request,response,e);

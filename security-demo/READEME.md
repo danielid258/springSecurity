@@ -127,6 +127,27 @@ spring security
         实现AuthenticationFailureHandler, @Component
         指定自定义失败处理器: .failureHandler(failureHandler)
 
+    5 认证原理源码解析
+        认证流程
+        认证结果在多个请求间共享 SecurityContextPersistenceFilter
+            请求进入: 检查Session中是否有SecurityContext认证信息 有: -> 从Session中取出SecurityContext存到ThreadLoacal中
+            请求离开: 检查ThreadLoacal中是否有SecurityContext认证信息 有: -> 从ThreadLoacal中取出SecurityContext存到Session中
+
+        获取认证用户的信息
+            public Object getCurrentUser(@AuthenticationPrincipal UserDetails userDetails) {return userDetails;}
+
+            public Object getCurrentUser(Authentication authentication) {return authentication;}
+
+            public Object getCurrentUser() {return SecurityContextHolder.getContext().getAuthentication();}
+
+    6 图形验证码
+        生成随机数 -> 随机数存到session -> 输出随机数图片
+
+        验证验证码: 增加一个Filter在UserNamePasswordFilter之前 验证验证码是否正确
+            自定义过滤器: ValidateCodeFilter extends OncePerRequestFilter
+            添加到指定位置: .addFilterBefore(validateCodeFilter, UsernamePasswordAuthenticationFilter.class)
+
+
 
 
 
