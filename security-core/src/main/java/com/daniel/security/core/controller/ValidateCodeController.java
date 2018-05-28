@@ -3,10 +3,12 @@ package com.daniel.security.core.controller;
 import com.daniel.security.core.properties.SecurityProperties;
 import com.daniel.security.core.util.VerifyCodeUtil;
 import com.daniel.security.core.validate.code.ImageCode;
+import com.daniel.security.core.validate.code.ValidateCodeGenerator;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.connect.web.HttpSessionSessionStrategy;
 import org.springframework.social.connect.web.SessionStrategy;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,26 +30,15 @@ public class ValidateCodeController {
 
     @Autowired
     private SecurityProperties securityProperties;
+    @Autowired
+    private ValidateCodeGenerator validateCodeGenerator;
 
     @GetMapping("/code/image")
     public void createCode(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        ImageCode imageCode = createImageCode(request);
+        ImageCode imageCode = validateCodeGenerator.generate(request);
 
         sessionStrategy.setAttribute(new ServletWebRequest(request), SESSION_KEY, imageCode);
 
         ImageIO.write(imageCode.getImage(), "JPEG", response.getOutputStream());
     }
-
-    private ImageCode createImageCode(HttpServletRequest request) {
-        int width = ServletRequestUtils.getIntParameter(request, "width", securityProperties.getCode().getImage().getWidth());
-
-        int height = ServletRequestUtils.getIntParameter(request, "height", securityProperties.getCode().getImage().getHeight());
-
-        String verifyCode = VerifyCodeUtil.generateVerifyCode(securityProperties.getCode().getImage().getLength());
-
-        BufferedImage image = VerifyCodeUtil.createImage(width, height, verifyCode);
-
-        return new ImageCode(image, verifyCode, securityProperties.getCode().getImage().getExpireInt());
-    }
-
 }

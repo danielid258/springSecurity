@@ -1,4 +1,4 @@
-package com.daniel.security.core;
+package com.daniel.security.core.config;
 
 import com.daniel.security.core.properties.SecurityProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

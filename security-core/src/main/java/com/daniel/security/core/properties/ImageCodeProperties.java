@@ -9,6 +9,7 @@ public class ImageCodeProperties {
     private int height = 40;
     private int length = 4;
     private int expireInt = 60;
+    private String url;
 
     public int getWidth() {
         return width;
@@ -40,5 +41,13 @@ public class ImageCodeProperties {
 
     public void setExpireInt(int expireInt) {
         this.expireInt = expireInt;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }
