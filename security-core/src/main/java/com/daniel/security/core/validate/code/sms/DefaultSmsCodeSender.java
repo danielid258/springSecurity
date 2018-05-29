@@ -8,6 +8,6 @@ package com.daniel.security.core.validate.code.sms;
 public class DefaultSmsCodeSender implements SmsCodeSender{
     @Override
     public void send(String mobile, String code) {
-        System.out.println("send " + code + " to " + mobile + "successful");
+        System.out.println("send " + code + " to " + mobile + " successful!");
     }
 }
