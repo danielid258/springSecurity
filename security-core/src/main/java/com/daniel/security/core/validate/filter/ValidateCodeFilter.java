@@ -1,7 +1,7 @@
-package com.daniel.security.core.filter;
+package com.daniel.security.core.validate.filter;
 
-import com.daniel.security.core.exception.ValidateCodeException;
-import com.daniel.security.core.properties.SecurityProperties;
+import com.daniel.security.core.validate.exception.ValidateCodeException;
+import com.daniel.security.core.validate.properties.SecurityProperties;
 import com.daniel.security.core.validate.code.image.ImageCode;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
