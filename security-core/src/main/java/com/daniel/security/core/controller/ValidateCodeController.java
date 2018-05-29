@@ -1,29 +1,58 @@
 package com.daniel.security.core.controller;
 
 import com.daniel.security.core.properties.SecurityProperties;
-import com.daniel.security.core.validate.code.ImageCode;
 import com.daniel.security.core.validate.code.ValidateCode;
 import com.daniel.security.core.validate.code.ValidateCodeGenerator;
+import com.daniel.security.core.validate.code.ValidateCodeProcessor;
+import com.daniel.security.core.validate.code.image.ImageCode;
 import com.daniel.security.core.validate.code.sms.SmsCodeSender;
-import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.connect.web.HttpSessionSessionStrategy;
 import org.springframework.social.connect.web.SessionStrategy;
 import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.ServletWebRequest;
 
 import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Map;
+
+import static com.sun.org.apache.xpath.internal.objects.XObjectFactory.create;
 
 /**
- * on 5/28/2018.
+ * Daniel on 2018/5/29.
  */
 @RestController
+@RequestMapping("/code")
 public class ValidateCodeController {
+    @Autowired
+    Map<String, ValidateCodeProcessor> validateCodeProcessors;
+
+    /**
+     * 创建验证码
+     *
+     * 根据不同的验证码类型调用不同的{@link validateCodeProcessors}实现
+     *
+     * @param request
+     * @param response
+     * @param type
+     * @throws Exception
+     */
+    @GetMapping("/{type}")
+    public void createCode(HttpServletRequest request, HttpServletResponse response, @PathVariable String type) throws Exception {
+        validateCodeProcessors.get(type + "CodeProcessor").create(new ServletWebRequest(request, response));
+    }
+
+
+
+
+    //==================================================================
     public static final String SESSION_KEY = "SESSION_KEY_IMAGE_CODE";
 
     private SessionStrategy sessionStrategy = new HttpSessionSessionStrategy();
@@ -44,9 +73,9 @@ public class ValidateCodeController {
      * @param response
      * @throws IOException
      */
-    @GetMapping("/code/sms")
+    //@GetMapping("/code/sms")
     public void createSmsCode(HttpServletRequest request, HttpServletResponse response) throws ServletRequestBindingException {
-        ValidateCode smsCode = smsCodeGenerator.generate(request);
+        ValidateCode smsCode = smsCodeGenerator.generate(new ServletWebRequest(request,response));
 
         sessionStrategy.setAttribute(new ServletWebRequest(request), SESSION_KEY, smsCode);
 
@@ -61,9 +90,9 @@ public class ValidateCodeController {
      * @param response
      * @throws IOException
      */
-    @GetMapping("/code/image")
+    //@GetMapping("/code/image")
     public void createImageCode(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        ImageCode imageCode = (ImageCode) imageCodeGenerator.generate(request);
+        ImageCode imageCode = (ImageCode) imageCodeGenerator.generate(new ServletWebRequest(request, response));
 
         sessionStrategy.setAttribute(new ServletWebRequest(request), SESSION_KEY, imageCode);
 

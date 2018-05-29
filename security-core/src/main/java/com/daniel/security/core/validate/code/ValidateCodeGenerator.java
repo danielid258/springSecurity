@@ -1,6 +1,6 @@
 package com.daniel.security.core.validate.code;
 
-import org.apache.catalina.servlet4preview.http.HttpServletRequest;
+import org.springframework.web.context.request.ServletWebRequest;
 
 /**
  * Daniel on 2018/5/28.
@@ -12,5 +12,5 @@ public interface ValidateCodeGenerator {
      * @param request
      * @return
      */
-    ValidateCode generate(HttpServletRequest request);
+    ValidateCode generate(ServletWebRequest request);
 }

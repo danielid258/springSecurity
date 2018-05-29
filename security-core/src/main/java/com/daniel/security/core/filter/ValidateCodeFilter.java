@@ -2,7 +2,7 @@ package com.daniel.security.core.filter;
 
 import com.daniel.security.core.exception.ValidateCodeException;
 import com.daniel.security.core.properties.SecurityProperties;
-import com.daniel.security.core.validate.code.ImageCode;
+import com.daniel.security.core.validate.code.image.ImageCode;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;

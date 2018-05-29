@@ -1,7 +1,7 @@
 package com.daniel.security.core.config;
 
 import com.daniel.security.core.properties.SecurityProperties;
-import com.daniel.security.core.validate.code.ImageCodeGenerator;
+import com.daniel.security.core.validate.code.image.ImageCodeGenerator;
 import com.daniel.security.core.validate.code.ValidateCodeGenerator;
 import com.daniel.security.core.validate.code.sms.DefaultSmsCodeSender;
 import com.daniel.security.core.validate.code.sms.SmsCodeSender;
