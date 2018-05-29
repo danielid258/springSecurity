@@ -2,8 +2,8 @@ package com.daniel.security.browser;
 
 import com.daniel.security.browser.authentication.CustomizedAuthenticationFailureHandler;
 import com.daniel.security.browser.authentication.CustomizedAuthenticationSuccessHandler;
-import com.daniel.security.core.filter.ValidateCodeFilter;
-import com.daniel.security.core.properties.SecurityProperties;
+import com.daniel.security.core.validate.filter.ValidateCodeFilter;
+import com.daniel.security.core.validate.properties.SecurityProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
