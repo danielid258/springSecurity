@@ -147,6 +147,10 @@ spring security
             自定义过滤器: ValidateCodeFilter extends OncePerRequestFilter
             添加到指定位置: .addFilterBefore(validateCodeFilter, UsernamePasswordAuthenticationFilter.class)
 
+    7 remeber me
+        RememberMeAuthenticationFilter RememberMeServices
+
+
 
 
 

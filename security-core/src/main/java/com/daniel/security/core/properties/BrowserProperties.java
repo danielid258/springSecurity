@@ -22,6 +22,11 @@ public class BrowserProperties {
      */
     private LoginType loginType = LoginType.JSON;
 
+    /**
+     * remember me expire time
+     */
+    private Integer rememberMeSeconds = 3600;
+
     public String getLoginPage() {
         return loginPage;
     }
@@ -36,5 +41,13 @@ public class BrowserProperties {
 
     public void setLoginType(LoginType loginType) {
         this.loginType = loginType;
+    }
+
+    public Integer getRememberMeSeconds() {
+        return rememberMeSeconds;
+    }
+
+    public void setRememberMeSeconds(Integer rememberMeSeconds) {
+        this.rememberMeSeconds = rememberMeSeconds;
     }
 }

@@ -78,11 +78,14 @@ public class ValidateCodeFilter extends OncePerRequestFilter implements Initiali
     @Override
     public void afterPropertiesSet() throws ServletException {
         super.afterPropertiesSet();
+        urls.add("/authenticate/form");
         String[] configUrls = StringUtils.split(securityProperties.getCode().getImage().getUrl(), ",");
+        if (configUrls == null)
+            return;
+
         for (String configUrl : configUrls) {
             urls.add(configUrl);
         }
-        urls.add("/authenticate/form");
     }
 
     /**
@@ -109,7 +112,7 @@ public class ValidateCodeFilter extends OncePerRequestFilter implements Initiali
         if (!StringUtils.equalsIgnoreCase(requestCode, imageCode.getCode()))
             throw new ValidateCodeException("verification code does not match!");
 
-        //verify succed remove code
+        //verify succed, remove code
         sessionStrategy.removeAttribute(request, SESSION_KEY);
     }
 
