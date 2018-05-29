@@ -1,4 +1,4 @@
-package com.daniel.security.core.util;
+package com.daniel.security.core.validate.util;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
