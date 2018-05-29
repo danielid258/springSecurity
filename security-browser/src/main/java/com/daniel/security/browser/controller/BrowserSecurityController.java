@@ -2,7 +2,6 @@ package com.daniel.security.browser.controller;
 
 import com.daniel.security.browser.support.SimpleResponse;
 import com.daniel.security.core.properties.SecurityProperties;
-import com.sun.org.apache.bcel.internal.generic.NEW;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
