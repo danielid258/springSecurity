@@ -16,6 +16,8 @@ import java.util.List;
 
 /**
  * Daniel on 2018/5/27.
+ *
+ * 自定义登录认证逻辑
  */
 @Component
 public class MyUserDetailsService implements UserDetailsService{
@@ -32,6 +34,7 @@ public class MyUserDetailsService implements UserDetailsService{
         String encodePassword = passwordEncoder.encode("123456");
         logger.info("database encodePassword :" + encodePassword);
 
+        //return new MyUserDetails();
         return new User(username, encodePassword, authorities);
     }
 }
