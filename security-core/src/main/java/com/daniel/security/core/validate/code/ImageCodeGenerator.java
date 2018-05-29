@@ -10,6 +10,8 @@ import java.awt.image.BufferedImage;
 
 /**
  * Daniel on 2018/5/29.
+ *
+ * image verification code generator
  */
 public class ImageCodeGenerator implements ValidateCodeGenerator {
     @Autowired

@@ -150,6 +150,9 @@ spring security
     7 remeber me
         RememberMeAuthenticationFilter RememberMeServices
 
+    8 短信验证码登录
+
+
 
 
 
