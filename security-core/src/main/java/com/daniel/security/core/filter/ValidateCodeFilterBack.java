@@ -2,8 +2,8 @@ package com.daniel.security.core.filter;
 
 import com.daniel.security.core.exception.ValidateCodeException;
 import com.daniel.security.core.properties.SecurityProperties;
-import com.daniel.security.core.validate.code.ValidateCode;
 import com.daniel.security.core.validate.code.ValidateCodeProcessor;
+import com.daniel.security.core.validate.code.image.ImageCode;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -30,7 +30,7 @@ import java.util.Set;
  * OncePerRequestFilter类型的Filter只会被调用一次
  * InitializingBean 其他properties数据都初始化完毕后执行afterPropertiesSet方法中的特定操作
  */
-public class SmsCodeFilter extends OncePerRequestFilter implements InitializingBean {
+public class ValidateCodeFilterBack extends OncePerRequestFilter implements InitializingBean {
     //public static final String SESSION_KEY = "SESSION_KEY_IMAGE_CODE";
 
     private SessionStrategy sessionStrategy = new HttpSessionSessionStrategy();
@@ -79,8 +79,8 @@ public class SmsCodeFilter extends OncePerRequestFilter implements InitializingB
     @Override
     public void afterPropertiesSet() throws ServletException {
         super.afterPropertiesSet();
-        urls.add("/authenticate/mobile");
-        String[] configUrls = StringUtils.split(securityProperties.getCode().getSms().getUrl(), ",");
+        urls.add("/authenticate/form");
+        String[] configUrls = StringUtils.split(securityProperties.getCode().getImage().getUrl(), ",");
         if (configUrls == null)
             return;
 
@@ -96,24 +96,25 @@ public class SmsCodeFilter extends OncePerRequestFilter implements InitializingB
      * @throws ValidateCodeException
      */
     private void validate(ServletWebRequest request) throws ServletRequestBindingException {
-        String requestCode = ServletRequestUtils.getStringParameter(request.getRequest(), "smsCode");
+        ImageCode imageCode = (ImageCode) sessionStrategy.getAttribute(request, ValidateCodeProcessor.SESSION_KEY_PREFIX + "IMAGE");
+        if (imageCode == null)
+            throw new ValidateCodeException("verification code does not exist!");
+
+        String requestCode = ServletRequestUtils.getStringParameter(request.getRequest(), "imageCode");
+
         if (StringUtils.isBlank(requestCode))
             throw new ValidateCodeException("verification code can not be empty!");
 
-        ValidateCode validateCode = (ValidateCode) sessionStrategy.getAttribute(request, ValidateCodeProcessor.SESSION_KEY_PREFIX + "SMS");
-        if (validateCode == null)
-            throw new ValidateCodeException("verification code does not exist!");
-
-        if (validateCode.isExpired()) {
-            sessionStrategy.removeAttribute(request, ValidateCodeProcessor.SESSION_KEY_PREFIX + "SMS");
+        if (imageCode.isExpired()) {
+            sessionStrategy.removeAttribute(request, ValidateCodeProcessor.SESSION_KEY_PREFIX + "IMAGE");
             throw new ValidateCodeException("verification code has expired!");
         }
 
-        if (!StringUtils.equalsIgnoreCase(requestCode, validateCode.getCode()))
+        if (!StringUtils.equalsIgnoreCase(requestCode, imageCode.getCode()))
             throw new ValidateCodeException("verification code does not match!");
 
         //verify succed, remove code
-        sessionStrategy.removeAttribute(request, ValidateCodeProcessor.SESSION_KEY_PREFIX + "SMS");
+        sessionStrategy.removeAttribute(request, ValidateCodeProcessor.SESSION_KEY_PREFIX + "IMAGE");
     }
 
     public SessionStrategy getSessionStrategy() {

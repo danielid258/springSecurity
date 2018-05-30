@@ -17,10 +17,10 @@ public class SmsCodeAuthenticationProvider implements AuthenticationProvider{
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         SmsCodeAuthenticationToken authenticationToken = (SmsCodeAuthenticationToken) authentication;
 
+        //根据用户名查找用户信息: 手机号+短信 登录的查找方式即根据手机号查找用户信息 具体查找逻辑在UserDetailsService实现类的loadUserByUsername()方法中定义
         UserDetails user = userDetailsService.loadUserByUsername((String) authenticationToken.getPrincipal());
-
         if (user == null) {
-            throw new InternalAuthenticationServiceException("cannot load user information");
+            throw new InternalAuthenticationServiceException("cannot load user information by mobile: " + authenticationToken.getPrincipal());
         }
 
         SmsCodeAuthenticationToken authenticationResult = new SmsCodeAuthenticationToken(user, user.getAuthorities());

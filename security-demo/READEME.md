@@ -151,6 +151,8 @@ spring security
         RememberMeAuthenticationFilter RememberMeServices
 
     8 短信验证码登录
+        SmsAuthenticationToken -> AuthenticationManager -> SmsAuthenticationProvider -> UserDetailService -> UserDetails -> Authentication
+
 
 
 

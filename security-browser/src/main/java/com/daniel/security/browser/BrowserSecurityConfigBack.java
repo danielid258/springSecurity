@@ -1,8 +1,8 @@
 package com.daniel.security.browser;
 
-import com.daniel.security.core.config.AbstractChannelSecurityConfig;
+import com.daniel.security.browser.handler.CustomizedAuthenticationFailureHandler;
+import com.daniel.security.browser.handler.CustomizedAuthenticationSuccessHandler;
 import com.daniel.security.core.config.SmsCodeAuthenticationSecurityConfig;
-import com.daniel.security.core.config.ValidateCodeSecurityConfig;
 import com.daniel.security.core.filter.SmsCodeFilter;
 import com.daniel.security.core.filter.ValidateCodeFilter;
 import com.daniel.security.core.properties.SecurityProperties;
@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,31 +24,26 @@ import javax.sql.DataSource;
  * Daniel on 2018/5/27.
  */
 @Configuration
-public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
+public class BrowserSecurityConfigBack extends WebSecurityConfigurerAdapter {
     @Autowired
     SecurityProperties securityProperties;
+    @Autowired
+    CustomizedAuthenticationSuccessHandler successHandler;
+    @Autowired
+    CustomizedAuthenticationFailureHandler failureHandler;
     @Autowired
     private DataSource dataSource;
     @Autowired
     private UserDetailsService userDetailsService;
     @Autowired
-    private ValidateCodeSecurityConfig validateCodeSecurityConfig;
-
-    @Autowired
     SmsCodeAuthenticationSecurityConfig smsCodeAuthenticationSecurityConfig;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        //密码登录方式的公共配置
-        applyPasswordAuthenticationConfig(http);
-
-        //验证码校验Filter的注册配置
-        http.apply(validateCodeSecurityConfig)
-
-        ValidateCodeFilter validateCodeFilter = new ValidateCodeFilter();
-        validateCodeFilter.setFailureHandler(failureHandler);
-        validateCodeFilter.setSecurityProperties(securityProperties);
-        validateCodeFilter.afterPropertiesSet();
+        //ValidateCodeFilter validateCodeFilter = new ValidateCodeFilter();
+        //validateCodeFilter.setFailureHandler(failureHandler);
+        //validateCodeFilter.setSecurityProperties(securityProperties);
+        //validateCodeFilter.afterPropertiesSet();
 
         SmsCodeFilter smsCodeFilter = new SmsCodeFilter();
         smsCodeFilter.setFailureHandler(failureHandler);
@@ -55,7 +51,7 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
         smsCodeFilter.afterPropertiesSet();
 
         http.addFilterBefore(smsCodeFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(validateCodeFilter, UsernamePasswordAuthenticationFilter.class)    //把自定义的过滤器添加到springSecurity过滤器链的指定位置
+                //.addFilterBefore(validateCodeFilter, UsernamePasswordAuthenticationFilter.class)    //把自定义的过滤器添加到springSecurity过滤器链的指定位置
                 .formLogin()
                     .loginPage("/authenticate/require")         //在此处确定跳转的认证页面地址
                     .loginProcessingUrl("/authenticate/form")   //登录页面表单提交地址

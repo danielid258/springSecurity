@@ -30,13 +30,18 @@ public class SmsCodeAuthenticationSecurityConfig extends SecurityConfigurerAdapt
     @Override
     public void configure(HttpSecurity http) throws Exception {
         SmsCodeAuthenticationFilter smsCodeAuthenticationFilter = new SmsCodeAuthenticationFilter();
+        //set AuthenticationManager
         smsCodeAuthenticationFilter.setAuthenticationManager(http.getSharedObject(AuthenticationManager.class));
+
+        //set success and failure handler
         smsCodeAuthenticationFilter.setAuthenticationSuccessHandler(customizedAuthenticationFailureHandler);
         smsCodeAuthenticationFilter.setAuthenticationFailureHandler(customizedAuthenticationSuccessHandler);
 
         SmsCodeAuthenticationProvider smsCodeAuthenticationProvider = new SmsCodeAuthenticationProvider();
+        //set UserDetailsService for provider
         smsCodeAuthenticationProvider.setUserDetailsService(userDetailsService);
 
+        //register provider
         http.authenticationProvider(smsCodeAuthenticationProvider)
                 .addFilterAfter(smsCodeAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }

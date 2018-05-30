@@ -26,9 +26,13 @@ public class MyUserDetailsService implements UserDetailsService{
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    //@Autowired
+    //private UserDao userDao;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         logger.info("username :" + username);
+        //User user = userDao.getUserByUsername(username;)
 
         List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList("admin");
         String encodePassword = passwordEncoder.encode("123456");

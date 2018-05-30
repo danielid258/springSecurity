@@ -1,4 +1,4 @@
-package com.daniel.security.browser.authentication;
+package com.daniel.security.browser.handler;
 
 import com.daniel.security.browser.support.SimpleResponse;
 import com.daniel.security.core.properties.LoginType;

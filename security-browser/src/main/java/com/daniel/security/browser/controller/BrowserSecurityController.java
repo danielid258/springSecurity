@@ -56,7 +56,7 @@ public class BrowserSecurityController {
             if (StringUtils.endsWithIgnoreCase(redirectUrl, ".html"))
                 redirectStrategy.sendRedirect(request, response, securityProperties.getBrowser().getLoginPage());
         }
-        return new SimpleResponse("the url need to authentication,please go and sigin!");
+        return new SimpleResponse("the url need to handler,please go and sigin!");
 
     }
 }

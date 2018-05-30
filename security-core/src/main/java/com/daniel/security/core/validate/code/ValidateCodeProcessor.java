@@ -27,5 +27,5 @@ public interface ValidateCodeProcessor {
      * @param servletWebRequest
      * @throws Exception
      */
-    //void validate(ServletWebRequest servletWebRequest);
+    void validate(ServletWebRequest servletWebRequest);
 }

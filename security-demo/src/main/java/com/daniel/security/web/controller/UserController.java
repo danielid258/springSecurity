@@ -36,8 +36,8 @@ public class UserController {
         return userDetails;
     }
 
-    //public Object getCurrentUser(Authentication authentication) {
-    //    return authentication;
+    //public Object getCurrentUser(Authentication handler) {
+    //    return handler;
     //}
 
     //public Object getCurrentUser() {
