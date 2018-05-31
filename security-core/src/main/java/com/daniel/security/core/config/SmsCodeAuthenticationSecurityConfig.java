@@ -15,6 +15,8 @@ import org.springframework.stereotype.Component;
 
 /**
  * Daniel on 2018/5/29.
+ *
+ * 扩展springSecurity认证方式: 手机号+短信验证码
  */
 @Component
 public class SmsCodeAuthenticationSecurityConfig extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
@@ -42,7 +44,7 @@ public class SmsCodeAuthenticationSecurityConfig extends SecurityConfigurerAdapt
         smsCodeAuthenticationProvider.setUserDetailsService(userDetailsService);
 
         //register provider
-        http.authenticationProvider(smsCodeAuthenticationProvider)
-                .addFilterAfter(smsCodeAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterAfter(smsCodeAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)        //把扩展认证方式的过滤器加到过滤器链上
+            .authenticationProvider(smsCodeAuthenticationProvider);                                         //注册该认证方式的 AuthenticationProvider
     }
 }

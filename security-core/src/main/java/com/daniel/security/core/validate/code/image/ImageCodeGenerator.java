@@ -13,6 +13,9 @@ import java.awt.image.BufferedImage;
  * Daniel on 2018/5/29.
  *
  * image verification code generator
+ *
+ * 这里不用Component 是为了ValidateCodeBeanConfig中通过@ConditionalOnMissingBean将本类作为默认ImageCodeGenerator
+ * 但是如果客户端自定义了ImageCodeGenerator 则覆盖默认
  */
 public class ImageCodeGenerator implements ValidateCodeGenerator {
     @Autowired

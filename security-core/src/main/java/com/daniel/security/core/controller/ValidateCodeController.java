@@ -1,9 +1,10 @@
 package com.daniel.security.core.controller;
 
+import com.daniel.security.core.properties.SecurityConstants;
 import com.daniel.security.core.properties.SecurityProperties;
 import com.daniel.security.core.validate.code.ValidateCode;
 import com.daniel.security.core.validate.code.ValidateCodeGenerator;
-import com.daniel.security.core.validate.code.ValidateCodeProcessor;
+import com.daniel.security.core.validate.code.ValidateCodeProcessorHolder;
 import com.daniel.security.core.validate.code.image.ImageCode;
 import com.daniel.security.core.validate.code.sms.SmsCodeSender;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,19 +22,18 @@ import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Map;
-
-import static com.sun.org.apache.xpath.internal.objects.XObjectFactory.create;
 
 /**
  * Daniel on 2018/5/29.
  */
 @RestController
-@RequestMapping("/code")
+@RequestMapping(SecurityConstants.DEFAULT_VALIDATE_CODE_URL_PREFIX)
 public class ValidateCodeController {
-    @Autowired
-    Map<String, ValidateCodeProcessor> validateCodeProcessors;
+    //@Autowired
+    //Map<String, ValidateCodeProcessor> validateCodeProcessors;
 
+    @Autowired
+    private ValidateCodeProcessorHolder validateCodeProcessorHolder;
     /**
      * 创建验证码
      *
@@ -45,8 +45,8 @@ public class ValidateCodeController {
      * @throws Exception
      */
     @GetMapping("/{type}")
-    public void createCode(HttpServletRequest request, HttpServletResponse response, @PathVariable String type) throws Exception {
-        validateCodeProcessors.get(type + "CodeProcessor").create(new ServletWebRequest(request, response));
+    public void createCode(HttpServletRequest request, HttpServletResponse response, @PathVariable String type)throws Exception {
+        validateCodeProcessorHolder.findValidateCodeProcessor(type).create(new ServletWebRequest(request, response));
     }
 
 

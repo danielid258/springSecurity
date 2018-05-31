@@ -2,8 +2,6 @@ package com.daniel.security.core.filter;
 
 import com.daniel.security.core.exception.ValidateCodeException;
 import com.daniel.security.core.properties.SecurityProperties;
-import com.daniel.security.core.validate.code.ValidateCode;
-import com.daniel.security.core.validate.code.ValidateCodeProcessor;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -11,7 +9,6 @@ import org.springframework.social.connect.web.HttpSessionSessionStrategy;
 import org.springframework.social.connect.web.SessionStrategy;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.bind.ServletRequestBindingException;
-import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -96,24 +93,24 @@ public class SmsCodeFilter extends OncePerRequestFilter implements InitializingB
      * @throws ValidateCodeException
      */
     private void validate(ServletWebRequest request) throws ServletRequestBindingException {
-        String requestCode = ServletRequestUtils.getStringParameter(request.getRequest(), "smsCode");
-        if (StringUtils.isBlank(requestCode))
-            throw new ValidateCodeException("verification code can not be empty!");
-
-        ValidateCode validateCode = (ValidateCode) sessionStrategy.getAttribute(request, ValidateCodeProcessor.SESSION_KEY_PREFIX + "SMS");
-        if (validateCode == null)
-            throw new ValidateCodeException("verification code does not exist!");
-
-        if (validateCode.isExpired()) {
-            sessionStrategy.removeAttribute(request, ValidateCodeProcessor.SESSION_KEY_PREFIX + "SMS");
-            throw new ValidateCodeException("verification code has expired!");
-        }
-
-        if (!StringUtils.equalsIgnoreCase(requestCode, validateCode.getCode()))
-            throw new ValidateCodeException("verification code does not match!");
-
-        //verify succed, remove code
-        sessionStrategy.removeAttribute(request, ValidateCodeProcessor.SESSION_KEY_PREFIX + "SMS");
+        //String requestCode = ServletRequestUtils.getStringParameter(request.getRequest(), "smsCode");
+        //if (StringUtils.isBlank(requestCode))
+        //    throw new ValidateCodeException("verification code can not be empty!");
+        //
+        ////ValidateCode validateCode = (ValidateCode) sessionStrategy.getAttribute(request, ValidateCodeProcessor.SESSION_KEY_PREFIX + "SMS");
+        //if (validateCode == null)
+        //    throw new ValidateCodeException("verification code does not exist!");
+        //
+        //if (validateCode.isExpired()) {
+        //    sessionStrategy.removeAttribute(request, ValidateCodeProcessor.SESSION_KEY_PREFIX + "SMS");
+        //    throw new ValidateCodeException("verification code has expired!");
+        //}
+        //
+        //if (!StringUtils.equalsIgnoreCase(requestCode, validateCode.getCode()))
+        //    throw new ValidateCodeException("verification code does not match!");
+        //
+        ////verify succed, remove code
+        //sessionStrategy.removeAttribute(request, ValidateCodeProcessor.SESSION_KEY_PREFIX + "SMS");
     }
 
     public SessionStrategy getSessionStrategy() {

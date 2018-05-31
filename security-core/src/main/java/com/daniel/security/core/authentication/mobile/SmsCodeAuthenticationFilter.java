@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * 短信登录方式认证过滤器
  *
- * 功能 扩展springSecurity支持 手机号+短信验证码 方式登录
+ * 功能 扩展springSecurity认证方式: 手机号+短信验证码
  */
 public class SmsCodeAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
     private final String DANIEL_FORM_MOBILE_KEY = "mobile";

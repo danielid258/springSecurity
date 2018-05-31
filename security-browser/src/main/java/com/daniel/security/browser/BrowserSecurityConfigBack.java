@@ -4,11 +4,9 @@ import com.daniel.security.browser.handler.CustomizedAuthenticationFailureHandle
 import com.daniel.security.browser.handler.CustomizedAuthenticationSuccessHandler;
 import com.daniel.security.core.config.SmsCodeAuthenticationSecurityConfig;
 import com.daniel.security.core.filter.SmsCodeFilter;
-import com.daniel.security.core.filter.ValidateCodeFilter;
 import com.daniel.security.core.properties.SecurityProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -23,7 +21,7 @@ import javax.sql.DataSource;
 /**
  * Daniel on 2018/5/27.
  */
-@Configuration
+//@Configuration
 public class BrowserSecurityConfigBack extends WebSecurityConfigurerAdapter {
     @Autowired
     SecurityProperties securityProperties;

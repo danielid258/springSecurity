@@ -2,8 +2,6 @@ package com.daniel.security.core.filter;
 
 import com.daniel.security.core.exception.ValidateCodeException;
 import com.daniel.security.core.properties.SecurityProperties;
-import com.daniel.security.core.validate.code.ValidateCodeProcessor;
-import com.daniel.security.core.validate.code.image.ImageCode;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -11,7 +9,6 @@ import org.springframework.social.connect.web.HttpSessionSessionStrategy;
 import org.springframework.social.connect.web.SessionStrategy;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.bind.ServletRequestBindingException;
-import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -96,25 +93,25 @@ public class ValidateCodeFilterBack extends OncePerRequestFilter implements Init
      * @throws ValidateCodeException
      */
     private void validate(ServletWebRequest request) throws ServletRequestBindingException {
-        ImageCode imageCode = (ImageCode) sessionStrategy.getAttribute(request, ValidateCodeProcessor.SESSION_KEY_PREFIX + "IMAGE");
-        if (imageCode == null)
-            throw new ValidateCodeException("verification code does not exist!");
-
-        String requestCode = ServletRequestUtils.getStringParameter(request.getRequest(), "imageCode");
-
-        if (StringUtils.isBlank(requestCode))
-            throw new ValidateCodeException("verification code can not be empty!");
-
-        if (imageCode.isExpired()) {
-            sessionStrategy.removeAttribute(request, ValidateCodeProcessor.SESSION_KEY_PREFIX + "IMAGE");
-            throw new ValidateCodeException("verification code has expired!");
-        }
-
-        if (!StringUtils.equalsIgnoreCase(requestCode, imageCode.getCode()))
-            throw new ValidateCodeException("verification code does not match!");
-
-        //verify succed, remove code
-        sessionStrategy.removeAttribute(request, ValidateCodeProcessor.SESSION_KEY_PREFIX + "IMAGE");
+        //ImageCode imageCode = (ImageCode) sessionStrategy.getAttribute(request, ValidateCodeProcessor.SESSION_KEY_PREFIX + "IMAGE");
+        //if (imageCode == null)
+        //    throw new ValidateCodeException("verification code does not exist!");
+        //
+        //String requestCode = ServletRequestUtils.getStringParameter(request.getRequest(), "imageCode");
+        //
+        //if (StringUtils.isBlank(requestCode))
+        //    throw new ValidateCodeException("verification code can not be empty!");
+        //
+        //if (imageCode.isExpired()) {
+        //    //sessionStrategy.removeAttribute(request, ValidateCodeProcessor.SESSION_KEY_PREFIX + "IMAGE");
+        //    throw new ValidateCodeException("verification code has expired!");
+        //}
+        //
+        //if (!StringUtils.equalsIgnoreCase(requestCode, imageCode.getCode()))
+        //    throw new ValidateCodeException("verification code does not match!");
+        //
+        ////verify succed, remove code
+        ////sessionStrategy.removeAttribute(request, ValidateCodeProcessor.SESSION_KEY_PREFIX + "IMAGE");
     }
 
     public SessionStrategy getSessionStrategy() {

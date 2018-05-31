@@ -5,6 +5,7 @@ import com.daniel.security.core.config.SmsCodeAuthenticationSecurityConfig;
 import com.daniel.security.core.config.ValidateCodeSecurityConfig;
 import com.daniel.security.core.filter.SmsCodeFilter;
 import com.daniel.security.core.filter.ValidateCodeFilter;
+import com.daniel.security.core.properties.SecurityConstants;
 import com.daniel.security.core.properties.SecurityProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -26,13 +27,23 @@ import javax.sql.DataSource;
 public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
     @Autowired
     SecurityProperties securityProperties;
+    /**
+     * Remember Me Datasource
+     */
     @Autowired
     private DataSource dataSource;
+
     @Autowired
     private UserDetailsService userDetailsService;
+    /**
+     * 验证码校验过滤器
+     */
     @Autowired
     private ValidateCodeSecurityConfig validateCodeSecurityConfig;
 
+    /**
+     * 手机号+短信验证码认证过滤器
+     */
     @Autowired
     SmsCodeAuthenticationSecurityConfig smsCodeAuthenticationSecurityConfig;
 
@@ -40,47 +51,30 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
     protected void configure(HttpSecurity http) throws Exception {
         //密码登录方式的公共配置
         applyPasswordAuthenticationConfig(http);
-
-        //验证码校验Filter的注册配置
-        http.apply(validateCodeSecurityConfig)
-
-        ValidateCodeFilter validateCodeFilter = new ValidateCodeFilter();
-        validateCodeFilter.setFailureHandler(failureHandler);
-        validateCodeFilter.setSecurityProperties(securityProperties);
-        validateCodeFilter.afterPropertiesSet();
-
-        SmsCodeFilter smsCodeFilter = new SmsCodeFilter();
-        smsCodeFilter.setFailureHandler(failureHandler);
-        smsCodeFilter.setSecurityProperties(securityProperties);
-        smsCodeFilter.afterPropertiesSet();
-
-        http.addFilterBefore(smsCodeFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(validateCodeFilter, UsernamePasswordAuthenticationFilter.class)    //把自定义的过滤器添加到springSecurity过滤器链的指定位置
-                .formLogin()
-                    .loginPage("/authenticate/require")         //在此处确定跳转的认证页面地址
-                    .loginProcessingUrl("/authenticate/form")   //登录页面表单提交地址
-                    .successHandler(successHandler)
-                    .failureHandler(failureHandler)
-                .and()
-                    .rememberMe()
-                    .tokenRepository(persistentTokenRepository())   //指定tokenRepository 用于读取和写入token
-                    .tokenValiditySeconds(securityProperties.getBrowser().getRememberMeSeconds())       //token过期时间
-                    .userDetailsService(userDetailsService)         //查询到token后  处理校验逻辑的UserDetailsService实现类
-                .and()
-                    .authorizeRequests()    //authorize 授权
-                    .antMatchers("/authenticate/require",
-                            "/code/*",      // /code/image,/code/sms
-                            securityProperties.getBrowser().getLoginPage()
+        http.apply(validateCodeSecurityConfig)                      //验证码校验Filter的注册配置
+            .and()
+            .apply(smsCodeAuthenticationSecurityConfig)             //扩展springSecurity认证方式: 手机号+短信验证码
+            .and()
+            .rememberMe()
+                .tokenRepository(persistentTokenRepository())
+                .tokenValiditySeconds(securityProperties.getBrowser().getRememberMeSeconds())
+                .userDetailsService(userDetailsService)
+            .and()
+            .authorizeRequests()
+                .antMatchers(SecurityConstants.DEFAULT_UNAUTHENTICATION_URL,
+                    SecurityConstants.DEFAULT_LOGIN_PROCESSING_URL_MOBILE,
+                    SecurityConstants.DEFAULT_VALIDATE_CODE_URL_PREFIX + "/*",
+                    securityProperties.getBrowser().getLoginPage()
                     ).permitAll()
-                    .anyRequest()
-                    .authenticated()       //authenticate 认证
-                .and()
-                    .csrf().disable()
-                .apply(smsCodeAuthenticationSecurityConfig);
+                .anyRequest()
+                .authenticated()
+            .and()
+            .csrf()
+                .disable();
     }
 
     /**
-     * 密码加密 验证
+     * PasswordEncoder
      *
      * @return
      */
@@ -90,16 +84,14 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
     }
 
     /**
-     * 注入
-     * 持久化操作remember me的token的TokenRepository
+     * PersistentTokenRepository
+     *
      * @return
      */
     @Bean
     public PersistentTokenRepository persistentTokenRepository(){
         JdbcTokenRepositoryImpl repository = new JdbcTokenRepositoryImpl();
-        //setDataSource
         repository.setDataSource(dataSource);
-        //create table on startup
         //repository.setCreateTableOnStartup(true);
         return repository;
     }

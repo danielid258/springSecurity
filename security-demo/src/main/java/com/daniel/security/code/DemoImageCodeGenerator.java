@@ -10,7 +10,7 @@ import org.springframework.web.context.request.ServletWebRequest;
  * 客户端自定义的图片验证码生成器
  *
  */
-//@Component("imageCodeGenerator")    //此处强制需要名称=imageCodeGenerator,否则不能覆盖系统默认提供的图片验证码生成器
+//@Component("imageValidateCodeGenerator")    //此处强制需要名称=imageCodeGenerator,否则不能覆盖系统默认提供的图片验证码生成器
 public class DemoImageCodeGenerator implements ValidateCodeGenerator {
     @Override
     public ImageCode generate(ServletWebRequest request) {

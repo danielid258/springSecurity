@@ -20,7 +20,7 @@ public class ValidateCodeBeanConfig {
 
     @Bean
     //根据名称判断 此处不能使用类型判断: ValidateCodeGenerator还有其他的实现类SmsCodeGenerator,如果用类型判断 下面的注入不会执行
-    @ConditionalOnMissingBean(name = "imageCodeGenerator")  //当spring容器中不存在 name = "imageCodeGenerator" 的bean时才执行此处的的注入; 否则使用已有的bean
+    @ConditionalOnMissingBean(name = "imageValidateCodeGenerator")  //当spring容器中不存在 name = "imageCodeGenerator" 的bean时才执行此处的的注入; 否则使用已有的bean
     public ValidateCodeGenerator imageCodeGenerator() {
         ImageCodeGenerator codeGenerator = new ImageCodeGenerator();
         codeGenerator.setSecurityProperties(securityProperties);

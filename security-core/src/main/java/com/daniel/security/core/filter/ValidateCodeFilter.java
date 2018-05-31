@@ -26,7 +26,7 @@ import java.util.Set;
 /**
  * OncePerRequestFilter 一个请求只拦截一次 进入时拦截离开时不拦截
  *
- *  InitializingBean spring容器初始化完毕后执行afterPropertiesSet方法
+ * InitializingBean spring容器初始化完毕后执行afterPropertiesSet方法
  */
 @Component
 public class ValidateCodeFilter extends OncePerRequestFilter implements InitializingBean {
