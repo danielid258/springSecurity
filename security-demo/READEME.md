@@ -154,21 +154,22 @@ spring security
         SmsAuthenticationToken -> AuthenticationManager -> SmsAuthenticationProvider -> UserDetailService -> UserDetails -> Authentication
 
 
+    8 Auth2 protocol
 
 
+ spring social
+    SocialAuthenticationFilter
 
+    ServiceProvider AbstractOAuth2ServiceProvider   封装社交服务提供商(用于登录的社交服务如:QQ,LinkedIn etc...)
 
+    OAuth2Operations OAuth2Template 封装1-5步骤的流程
 
+    ApiBinding AbstractOAuth2ApiBinding 封装6步骤: 获取用户信息
 
+    ConnectionFactory 创建Connection
+    Connection OAuth2Connection 封装springSocial标准结构的用户信息数据
 
+    ApiAdapter 将社交服务提供商ServiceProvider步骤6中返回的用户数据 适配为springSocial标准的用户数据
 
-
-
-
-
-
-
-
-
-
-
+    UserConnection表: 保存服务提供商和自己的系统间 用户对应关系
+    UsersConnectionRepository JdbcUsersConnectionRepository 操作UserConnection表
